@@ -58,6 +58,27 @@ public class AggregatorController {
         return entries;
     }
 
+    @GetMapping("/getWordsEndingWith/{chars}")
+    public List<Entry> getWordsEndingWith(@PathVariable String chars) {
+
+        StopWatch sw = new StopWatch();
+
+        sw.start();
+        List<Entry> entries = service.getWordsEndingWith(chars);
+        sw.stop();
+
+        long nanoSeconds = sw.getLastTaskTimeNanos();
+        String message = new StringBuilder("Retrieved entry for words ending with [")
+                .append(chars)
+                .append("] in ")
+                .append(nanoSeconds / 1000000.0)
+                .append("ms")
+                .toString();
+        logger.info(message);
+
+        return entries;
+    }
+
     @GetMapping("/getWordsThatContainSuccessiveLettersAndContains/{chars}")
     public List<Entry> getWordsThatContainSuccessiveLettersAndContains(@PathVariable String chars) {
 
@@ -77,5 +98,10 @@ public class AggregatorController {
         logger.info(message);
 
         return entries;
+    }
+
+    @GetMapping("/getAllPalindromes/{word}")
+    public List<Entry> getAllPalindromes() {
+        return this.service.getAllPalindromes();
     }
 }
